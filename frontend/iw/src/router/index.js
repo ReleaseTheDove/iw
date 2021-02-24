@@ -5,6 +5,7 @@ const Home = () => import('@/components/Home')
 const Daily = () => import('@/components/Daily')
 const About = () => import('@/components/About')
 const Market = () => import('@/components/Market')
+const KLine = () => import ('@/components/KLine')
 
 Vue.use(Router)
 
@@ -36,6 +37,10 @@ export default new Router({
     {
       path: '/market/:code',
       component: Market
+    },
+    {
+      path: '/kline',
+      component: KLine
     }
   ],
   mode: 'history'
