@@ -39,7 +39,7 @@ export default new Router({
       component: Market
     },
     {
-      path: '/kline',
+      path: '/kline/:code',
       component: KLine
     }
   ],

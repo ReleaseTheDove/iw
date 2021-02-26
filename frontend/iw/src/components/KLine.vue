@@ -15,7 +15,7 @@
 <script>
 
 import HQChart from 'hqchart'
-import 'hqchart/src/jscommon/umychart.resource/css/tools.css'
+import {request} from '@/network/request'
 
 const KLineOption = {
   Type: '历史K线图',
@@ -37,12 +37,21 @@ const KLineOption = {
     Left: 1, //左边间距
       Right: 60, //右边间距
       Top: 25
-  }
+  },
+  NetworkFilter: NetworkFilter
+}
+
+function NetworkFilter (data, callback) {
+  data.PreventDefault=true;
+  request({
+    url: '/api/stock'+window.location.pathname
+  }).then( res => {
+    callback(res);
+  })
 }
 
 export default {
   name:'StockKLine',
-
   data () {
     let data = {
       Symbol: '600000.sh',
@@ -177,6 +186,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+@import 'hqchart/src/jscommon/umychart.resource/css/tools.css';
+
 $border: 1px solid #e1ecf2;
 
 .stockkline

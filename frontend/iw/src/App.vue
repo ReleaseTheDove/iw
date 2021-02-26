@@ -3,7 +3,7 @@
     <router-link to="/home" tag="button" replace>Home</router-link>
     <router-link to="/about">About</router-link>
     <router-link :to="'/market/'+code">Market</router-link>
-    <router-link to="/kline">KLine</router-link>
+    <router-link :to="'/kline/'+code">KLine</router-link>
     <keep-alive exclude="Market,About">
       <router-view/>
     </keep-alive>
