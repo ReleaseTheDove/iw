@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from app.config import STOCK_DAILY_PATH
 from app.utils.exc import FileNotFoundException
+from app.utils import cache
 
 
 router = APIRouter()
@@ -22,6 +23,7 @@ class KLine(BaseModel):
 
 
 @router.get('/kline/{code}', response_model=KLine)
+@cache(3600)
 async def stock_daily(code: str):
     fp = os.path.join(STOCK_DAILY_PATH, code)
     if not os.path.isfile(fp):
