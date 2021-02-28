@@ -3,6 +3,8 @@ __all__ = ['cache', ]
 
 
 from functools import wraps
+import orjson
+
 from app.db import Redis
 
 
@@ -10,7 +12,11 @@ def cache(expire=60):
     def wrapper(func):
         @wraps(func)
         async def inner(*args, **kwargs):
-            key = [func.__module__, func.__name__]
+            key = [
+                func.__module__,
+                orjson.dumps(args).decode(),
+                orjson.dumps(kwargs).decode()
+                ]
             request = kwargs.get('request', None)
             if request:
                 if (request.method != "GET" or
