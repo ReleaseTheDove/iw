@@ -9,7 +9,8 @@ import moduleA from '@/store/modules/moduleA'
 Vue.use(Vuex)
 
 const state = {
-  counter: 3
+  counter: 3,
+  kline: {}
 }
 
 export default new Vuex.Store({

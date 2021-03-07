@@ -18,39 +18,6 @@
 import HQChart from 'hqchart'
 import {request} from '@/network/request'
 
-const KLineOption = {
-  Type: '历史K线图',
-  Windows: [
-    { Index: "MA" },
-    { Index: "VOL" },
-    { Index: "MACD" }
-  ],
-  KLine: {
-    DragMode: 1, //拖拽模式 0 禁止拖拽 1 数据拖拽 2 区间选择
-    Right: 1, //复权 0 不复权 1 前复权 2 后复权
-    Period: 0, //周期 0 日线 1 周线 2 月线 3 年线
-    MaxReqeustDataCount: 1000, //日线数据最近1000天
-    MaxRequestMinuteDayCount: 15,    //分钟数据最近15天
-    PageSize: 50, //一屏显示多少数据
-    IsShowTooltip: true //是否显示K线提示信息
-  },
-  Border: {
-    Left: 1, //左边间距
-      Right: 60, //右边间距
-      Top: 25
-  },
-  NetworkFilter: NetworkFilter
-}
-
-function NetworkFilter (data, callback) {
-  data.PreventDefault=true;
-  request({
-    url: '/api/stock'+window.location.pathname
-  }).then( res => {
-    callback(res);
-  })
-}
-
 export default {
   name:'StockKLine',
   data () {
@@ -59,7 +26,29 @@ export default {
       ID: HQChart.Chart.JSChart.CreateGuid(),
       KLine: {
         JSChart: null,
-        Option: KLineOption,
+        Option: {
+          Type: '历史K线图',
+          Windows: [
+            { Index: "MA" },
+            { Index: "VOL" },
+            { Index: "MACD" }
+          ],
+          KLine: {
+            DragMode: 1, //拖拽模式 0 禁止拖拽 1 数据拖拽 2 区间选择
+            Right: 1, //复权 0 不复权 1 前复权 2 后复权
+            Period: 0, //周期 0 日线 1 周线 2 月线 3 年线
+            MaxReqeustDataCount: 1000, //日线数据最近1000天
+            MaxRequestMinuteDayCount: 15,    //分钟数据最近15天
+            PageSize: 50, //一屏显示多少数据
+            IsShowTooltip: true //是否显示K线提示信息
+          },
+          Border: {
+            Left: 1, //左边间距
+              Right: 60, //右边间距
+              Top: 25
+          },
+          NetworkFilter: this.NetworkFilter
+        },
         IndexBar: {
           Menu:['RSI','MACD','KDJ','BOLL','DMI','CCI','OBV','SKDJ','BIAS'],
           // Menu:['BBI', 'MA', 'HMA', 'LMA', 'VMA', 'BOLL', 'SKDJ', 'KDJ', 'MACD', 'RSI', 'OBV', 'BIAS'],
@@ -104,6 +93,19 @@ export default {
     this.Code = this.$route.path.slice(-9,)
   },
   methods: {
+    NetworkFilter (data, callback) {
+      data.PreventDefault=true;
+      let path = window.location.pathname
+      if (path in this.$store.state.kline) {
+        return callback(this.$store.state.kline[path])
+      }
+      request({
+        url: '/api/stock'+path
+      }).then( res => {
+        callback(res);
+        this.$store.state.kline[path] = res
+      })
+    },
     ReSize () {
       let height = 0.95 * `${document.documentElement.clientHeight}`;
       let width = `${document.documentElement.clientWidth}`;
