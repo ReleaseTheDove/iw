@@ -70,24 +70,27 @@ export default {
     }
     return data;
   },
-  created () {
+  activated () {
     document.onkeydown = (e) => {
       if (e.key === 'Enter') {
         if (this.Code.startsWith('6')) this.Code += '.SH';
         else this.Code += '.SZ';
         this.$router.push('/kline/'+this.Code);
         this.ChangeSymbol(this.Code);
-        this.Code = '';
       } else if (e.key === 'Backspace') {
-        this.Code = this.Code.slice(0, -1)
+        this.Code = ''
       } else if (!isNaN(parseInt(e.key))) {
         this.Code += e.key
       }
     }
-  },
-  activated () {
     let full = `${document.documentElement.clientHeight}`;
     this.$refs.stockkline.style.height = (0.95*full)+'px';
+  },
+  watch:{
+    $route(to, from){
+      this.Code = to.path.slice(-9,)
+      this.ChangeSymbol(this.Code);
+    }
   },
   mounted () {
     this.OnSize();
@@ -96,7 +99,7 @@ export default {
     window.onresize = () => {
       this.ReSize()
     },
-    this.Code = window.location.pathname.slice(-9,)
+    this.Code = this.$route.path.slice(-9,)
   },
   methods: {
     ReSize () {
