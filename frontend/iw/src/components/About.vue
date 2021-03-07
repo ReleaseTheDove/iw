@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2>I'm the About Page</h2>
-    <p>I'm the content.</p>
-    <p>I'm the content.{{message}}</p>
+    <h2>Contact me</h2>
+    <p>email: coutingstars1@163.com</p>
+    <p>QQ: {{message}}</p>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 export default {
   name: 'About',
   data () {
-    return {'message': 'aboutaboutaboutabout'}
+    return {'message': '1204922393'}
   }
 }
 </script>

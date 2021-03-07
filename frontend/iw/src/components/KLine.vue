@@ -1,5 +1,6 @@
 <template>
   <div class="stockkline" ref='stockkline'>
+    <p>code: {{Code}}</p>
     <div>
       <div :id='ID' ref='divchart'>
         <div class='kline' id="kline" ref='kline'></div>
@@ -64,9 +65,25 @@ export default {
           // Menu:['BBI', 'MA', 'HMA', 'LMA', 'VMA', 'BOLL', 'SKDJ', 'KDJ', 'MACD', 'RSI', 'OBV', 'BIAS'],
           Selected:[1]
         }
-      }
+      },
+      Code: ''
     }
     return data;
+  },
+  created () {
+    document.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        if (this.Code.startsWith('6')) this.Code += '.SH';
+        else this.Code += '.SZ';
+        this.$router.push('/kline/'+this.Code);
+        this.ChangeSymbol(this.Code);
+        this.Code = '';
+      } else if (e.key === 'Backspace') {
+        this.Code = this.Code.slice(0, -1)
+      } else if (!isNaN(parseInt(e.key))) {
+        this.Code += e.key
+      }
+    }
   },
   activated () {
     let full = `${document.documentElement.clientHeight}`;
@@ -76,10 +93,10 @@ export default {
     this.OnSize();
     this.CreateKLineChart();
     this.ChangeChartPeriod();
-
     window.onresize = () => {
       this.ReSize()
-    }
+    },
+    this.Code = window.location.pathname.slice(-9,)
   },
   methods: {
     ReSize () {

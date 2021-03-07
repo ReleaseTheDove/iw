@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <router-link to="/home" tag="button" replace>Home</router-link>
+    <!-- <router-link to="/home" tag="button" replace>Home</router-link> -->
     <router-link to="/about">About</router-link>
-    <router-link :to="'/market/'+code">Market</router-link>
+    <!-- <router-link :to="'/market/'+code">Market</router-link> -->
     <router-link :to="'/kline/'+code">KLine</router-link>
-    <keep-alive exclude="Market,About">
+    <keep-alive exclude="Market,About,Kline">
       <router-view/>
     </keep-alive>
   </div>
@@ -16,7 +16,7 @@ export default {
   name: 'App',
   data () {
     return {
-      code: '000001.SZ'
+      code: '002425.SZ'
     }
   }
 }
