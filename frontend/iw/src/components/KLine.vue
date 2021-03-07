@@ -72,9 +72,11 @@ export default {
   },
   activated () {
     document.onkeydown = (e) => {
-      if (e.key === 'Enter') {
-        if (this.Code.startsWith('6')) this.Code += '.SH';
-        else this.Code += '.SZ';
+      if (e.key === 'Enter' && this.Code.length === 6) {
+        if (this.Code.indexOf('.S') === -1) {
+          if (this.Code.startsWith('6')) this.Code += '.SH';
+          else this.Code += '.SZ';
+        }
         this.$router.push('/kline/'+this.Code);
         this.ChangeSymbol(this.Code);
       } else if (e.key === 'Backspace') {
